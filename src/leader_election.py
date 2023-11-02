@@ -20,7 +20,13 @@ class LeaderElection:
     def __init__(self, zookeeper_address: str):
         self.zookeeper_address = zookeeper_address
         self._connect()
-
+        if not self.client.exists(self.election_namespace):
+            self.client.create(
+                path=self.election_namespace,
+                value=b"",
+                acl=OPEN_ACL_UNSAFE,
+            )
+    
     def __del__(self):
         self.client.stop()
         self.client.close()
@@ -36,12 +42,6 @@ class LeaderElection:
             time.sleep(100)
 
     def _volunteer_for_leadership(self):
-        if not self.client.exists(self.election_namespace):
-            self.client.create(
-                path=self.election_namespace,
-                value=b"",
-                acl=OPEN_ACL_UNSAFE,
-            )
         znode_prefix = self.election_namespace + "/c_"
         znode_full_path = self.client.create(
             path=znode_prefix,
