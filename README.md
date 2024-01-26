@@ -3,7 +3,7 @@ zookeeper를 활용한 리더 선출 프로그램
 
 ## Basic usage
 
-먼저, zookerper 서버를 실행합니다.
+먼저, zookeeper 서버를 실행합니다.
 
 ```
 $ docker-compose -f docker-compose.yml up
